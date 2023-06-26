@@ -1,0 +1,72 @@
+version: '3.3'
+
+services:
+  # MariaDB service
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    volumes: 
+      - mariadb:/var/lib/mysql  # Mounting a volume to persist data
+    networks:
+      - inception  # Connecting to the 'inception' network
+    build: 
+      context: requirements/mariadb  # Build context for MariaDB service
+      dockerfile: Dockerfile  # Dockerfile for MariaDB service
+    env_file: .env  # Loading environment variables from the '.env' file
+    restart: on-failure  # Restart the container on failure
+  
+  # WordPress service
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    env_file: .env  # Loading environment variables from the '.env' file
+    volumes:
+    - wordpress:/var/www/html/wordpress  # Mounting a volume to persist data
+    networks:
+      - inception  # Connecting to the 'inception' network
+    build: 
+      context: requirements/wordpress  # Build context for WordPress service
+      dockerfile: Dockerfile  # Dockerfile for WordPress service
+    depends_on:
+      - mariadb  # Ensuring that the MariaDB service is started first
+    restart: on-failure  # Restart the container on failure
+
+  # Nginx service
+  nginx:
+    image: nginx
+    container_name: nginx
+    volumes:
+      - wordpress:/var/www/html/wordpress  # Mounting the same volume as the WordPress service
+    networks:
+      - inception  # Connecting to the 'inception' network
+    depends_on:
+      - wordpress  # Ensuring that the WordPress service is started first
+    build: 
+      context: requirements/nginx  # Build context for Nginx service
+      dockerfile: Dockerfile  # Dockerfile for Nginx service
+    env_file: .env  # Loading environment variables from the '.env' file
+    ports:
+      - "443:443"  # Forwarding the host's port 443 to the container's port 443
+    restart: on-failure  # Restart the container on failure
+
+
+volumes:
+  wordpress:
+    driver: local  # Using the local volume driver
+    driver_opts:
+      type: none
+      o: bind
+      device: $HOME/data/wordpress  # Mapping the host's directory to the container's volume
+  mariadb:
+    driver: local  # Using the local volume driver
+    driver_opts:
+      type: none
+      o: bind
+      device: $HOME/data/mariadb  # Mapping the host's directory to the container's volume
+
+
+networks:
+  inception:
+    driver: bridge  # Using the bridge network driver for the 'inception' network
+
+
