@@ -13,8 +13,9 @@ services:
       context: requirements/mariadb  # Build context for MariaDB service
       dockerfile: Dockerfile  # Dockerfile for MariaDB service
     env_file: .env  # Loading environment variables from the '.env' file
-    restart: on-failure  # Restart the container on failure
-  
+    restart: always  # Restart the container on failure
+
+
   # WordPress service
   wordpress:
     image: wordpress
@@ -29,7 +30,8 @@ services:
       dockerfile: Dockerfile  # Dockerfile for WordPress service
     depends_on:
       - mariadb  # Ensuring that the MariaDB service is started first
-    restart: on-failure  # Restart the container on failure
+    restart: always  # Restart the container on failure
+
 
   # Nginx service
   nginx:
@@ -47,7 +49,7 @@ services:
     env_file: .env  # Loading environment variables from the '.env' file
     ports:
       - "443:443"  # Forwarding the host's port 443 to the container's port 443
-    restart: on-failure  # Restart the container on failure
+    restart: always  # Restart the container on failure
 
 
 volumes:
@@ -68,5 +70,4 @@ volumes:
 networks:
   inception:
     driver: bridge  # Using the bridge network driver for the 'inception' network
-
 

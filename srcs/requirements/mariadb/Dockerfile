@@ -1,40 +1,20 @@
-# FROM debian:buster
-
-# # Update the package repository and install MariaDB server
-# RUN apt-get update -y \
-#     && apt-get install mariadb-server -y
-
-# # Copy the data.sql file to the appropriate location
-# COPY /tools/data.sql /var/www/data.sql
-
-# # Copy the bind_adress.sh script to the root directory
-# COPY /tools/bind_adress.sh /
-# # Grant execution permission to bind_adress.sh
-# RUN chmod +x /bind_adress.sh
-
-# # Start the MySQL service, import the data.sql file, and remove it
-# RUN service mysql start && mysql < /var/www/data.sql && rm -f /var/www/data.sql;
-# # mysql < /var/www/data.sql: This command uses the MySQL client (mysql) to import the data.sql file into the MySQL database. The < symbol is used for input redirection, specifying that the data.sql file should be used as input for the mysql command.
-# # rm -f /var/www/data.sql: This command removes the data.sql file from the container. The -f flag is used to force the removal without prompting for confirmation.
-# # So, in summary, the line starts the MySQL service, imports the SQL data from the data.sql file into the MySQL database, and then removes the data.sql file from the container. This sequence of commands ensures that the database is set up with the provided data and cleans up the unnecessary SQL file afterward.
-
-# # Set the default command to run the MySQL daemon
-# CMD ["mysqld"]
-# # daemon is a computer program that runs as a background process, rather than being under the direct control of an interactive user. The MySQL daemon (mysqld) is the main program that does most of the work in a MySQL server. It is a server process that manages access to the MySQL data directory, provides access to all databases, manages concurrent requests from multiple clients, and performs other essential tasks.
-
-
-# # Set the entrypoint to execute the bind_adress.sh script
-# ENTRYPOINT ["bash", "/bind_adress.sh"]
-
-# #ENTRYPOINT is used to configure the container to run a specific command when it is started. It is similar to CMD, but the command specified in ENTRYPOINT is always executed, whereas the command specified in CMD can be overridden by providing arguments to the docker run command. In this case, the bind_adress.sh script is executed when the container is started.
+# Sets the base image for the container
 FROM debian:buster
 
-RUN apt-get update -y \
-    && apt-get install mariadb-server -y
+# Updates the package lists in the image and upgrades any installed packages
+RUN apt-get update && apt-get upgrade -y
 
-COPY /tools/data.sql /var/www/data.sql
-COPY /tools/bind_adress.sh /
-RUN chmod +x /bind_adress.sh
-RUN service mysql start && mysql < /var/www/data.sql && rm -f /var/www/data.sql;
-CMD ["mysqld"]
-ENTRYPOINT ["bash", "/bind_adress.sh"]
+# Installs the MariaDB server package in the image
+RUN apt-get install mariadb-server -y
+
+# Copies the `bind_adress.sh` file from the `tools` directory on the local machine to the root directory of the image
+COPY tools/bind_adress.sh /
+
+# Sets the executable permission on the `bind_adress.sh` file in the image
+RUN chmod +x bind_adress.sh
+
+# Specifies that the container should expose port 3306, which is the default port for MariaDB
+EXPOSE 3306
+
+# Specifies the entry point command for the container, which runs the `bind_adress.sh` script when the container starts.
+ENTRYPOINT ["bash", "bind_adress.sh"]

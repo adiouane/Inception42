@@ -1,15 +1,25 @@
-# #!/bin/bash
-
-# # Restart the MySQL service with the IP address set to 0.0.0.0
-# mysqld --bind-address=0.0.0.0
-
-# # mysqld --bind-address=0.0.0.0: This command starts the MySQL daemon (mysqld) and sets the bind address to 0.0.0.0.
-# # The mysqld command is used to start the MySQL server process.
-# # The --bind-address=0.0.0.0 flag specifies the IP address to which the MySQL server should bind. In this case, 0.0.0.0 is used, which means the server will listen on all available network interfaces.
-# # By restarting the MySQL service with the bind address set to 0.0.0.0, the MySQL server will be able to accept connections from any IP address, allowing external connections to the MySQL server. This can be useful in situations where you want to allow remote access to the MySQL server or when you need to access the MySQL server from different network environments.
-
-
 #!/bin/bash
+
+# Start the MySQL service
+service mysql start 
+
+# Create a new SQL file with the command to create the database
+mysql -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE ;" 
+
+# Add to the SQL file the command to create a new user with the specified credentials
+mysql -e "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' ;"
+
+# Add to the SQL file the command to grant all privileges to the user on the specified database
+mysql -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' ;"
+
+# Add to the SQL file the command to flush the privileges to ensure the changes take effect
+mysql -e "FLUSH PRIVILEGES;"
+
+# Stop the MySQL service
+service mysql stop
+
+# Kill the MySQL process
+kill $(cat /var/run/mysqld/mysqld.pid)
 
 # Restart the MySQL service with the IP address set to 0.0.0.0
 mysqld --bind-address=0.0.0.0

@@ -4,6 +4,7 @@
 
 # Create the directory for WordPress if it doesn't exist
 echo "Wordpress: creating users..."
+sleep 2
 if [ ! -d /var/www/html/wordpress ]; then
   mkdir -p /var/www/html/wordpress
 fi
