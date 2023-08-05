@@ -25,5 +25,11 @@ fclean:
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
+	@docker volume rm srcs_wordpress srcs_mariadb
+	# run  remove all volumes using skript volumes.sh
+	@sh ./volumes.sh
+	@sh ./Users/adiouane/data/sh.sh 
+
+
 
 .PHONY	: all build down re clean fclean

@@ -3,8 +3,8 @@
 # Install WordPress
 
 # Create the directory for WordPress if it doesn't exist
+sleep 10
 echo "Wordpress: creating users..."
-sleep 2
 if [ ! -d /var/www/html/wordpress ]; then
   mkdir -p /var/www/html/wordpress
 fi
@@ -14,6 +14,7 @@ cd /var/www/html/wordpress/
 
 # Download the WordPress core files using WP-CLI (WordPress Command Line Interface)
 wp core download --allow-root --path="/var/www/html/wordpress/"
+
 
 # Install WordPress using WP-CLI
 wp core install --allow-root \

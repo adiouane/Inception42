@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM  debian:bullseye
 
 # Update and upgrade the base Debian image
 RUN apt-get update && apt-get upgrade -y
@@ -8,7 +8,8 @@ RUN apt install nginx -y
 RUN apt-get install openssl -y
 
 # Create directories for SSL certificates
-RUN mkdir -p /etc/nginx/ssl //TODO: IS TRUE directory ?
+RUN mkdir -p /etc/nginx/ssl 
+#TODO: IS TRUE directory ?
 
 # Generate a self-signed SSL certificate using OpenSSL
 RUN openssl req -newkey rsa:4096 -days 42 -nodes -x509 \

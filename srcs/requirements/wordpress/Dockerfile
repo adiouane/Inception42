@@ -1,13 +1,13 @@
 # Use the Debian Buster base image for the container
-FROM debian:buster
+FROM  debian:bullseye
 
 # Update and upgrade the system packages in the container
 # Install wget and unzip tools in the container
-# Install PHP 7.3, PHP-FPM, PHP MySQL extension, and MariaDB client in the container
+# Install PHP 7.4, PHP-FPM, PHP MySQL extension, and MariaDB client in the container
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get -y install wget unzip \
-    && apt-get install -y php7.3 php-fpm php-mysql mariadb-client
+    && apt-get install -y php7.4 php-fpm php-mysql mariadb-client
 
 
 # Create a directory to store WordPress files
@@ -24,7 +24,7 @@ RUN mkdir -p /var/www/html/wordpress \
     && mv wp-cli.phar /usr/local/bin/wp
 
 # Copy the custom www.conf file to the PHP-FPM configuration directory
-COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 # Copy the custom config.sh script to the root directory of the container
 COPY conf/config.sh /
@@ -36,11 +36,11 @@ COPY /conf/wp-config.php /var/www/html/wordpress/wp-config.php
 # Create a directory for PHP-FPM, create a PID file, and set appropriate permissions
 RUN chmod +x config.sh \
     && mkdir -p /run/php/ \
-    && touch /run/php/php7.3-fpm.pid \
-    && chmod 777 /run/php/php7.3-fpm.pid
+    && touch /run/php/php7.4-fpm.pid \
+    && chmod 777 /run/php/php7.4-fpm.pid
 
 # Set the entrypoint of the container to execute the config.sh script
 ENTRYPOINT ["bash", "/config.sh"]
 
 # Set the default command to start PHP-FPM in the container
-CMD ["php-fpm7.3", "-RF"]
+CMD ["php-fpm7.4", "-RF"]
