@@ -11,7 +11,7 @@ down:
 	@printf "Stopping configuration ${name}...\n"
 	@docker-compose -f ./srcs/docker-compose.yml down
 
-re:	down
+re:	fclean all
 	@printf "Rebuild configuration ${name}...\n"
 	@docker-compose -f ./srcs/docker-compose.yml up  --build
 
@@ -26,9 +26,6 @@ fclean:
 	@docker network prune --force
 	@docker volume prune --force
 	@docker volume rm srcs_wordpress srcs_mariadb
-	# run  remove all volumes using skript volumes.sh
-	@sh ./volumes.sh
-	@sh ./Users/adiouane/data/sh.sh 
 
 
 

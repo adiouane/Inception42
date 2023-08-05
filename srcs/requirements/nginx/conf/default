@@ -1,9 +1,7 @@
 server {
-    listen 443 ssl default_server;
-    listen [::]:443 ssl default_server;
+    listen 443 ssl;
 
-    ssl on;
-    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_protocols TLSv1.3;
     ssl_certificate /etc/ssl/certs/inception.crt;
     ssl_certificate_key /etc/ssl/private/inception.key;
 
@@ -22,24 +20,6 @@ server {
     }
 }
 
-# The listen directives specify that NGINX should listen on port 443 for both IPv4 and IPv6 connections. The ssl parameter enables SSL/TLS for this server block. The ssl_certificate and ssl_certificate_key directives point to the paths of the SSL certificate and private key files.
+#ssl_protocols TLSv1.3;: This line specifies that only TLSv1.3 should be used for secure communication.
 
-# The root directive sets the root directory for this server block, which is /var/www/html/wordpress. This is the location where the web files for the website will be served from.
-
-# The index directive specifies the index files that NGINX should look for in the specified root directory when a directory is requested. In this case, it looks for index.php, index.html, index.htm, and index.nginx-debian.html in that order.
-
-# The server_name directive sets the server name or hostname for this server block. In this case, it is set to localhost.
-
-# The location / block defines the rules for processing requests to the root URL ("/"). The try_files directive attempts to serve the requested file as is, and if it doesn't exist, it falls back to serving a 404 error page.
-
-# The location ~ \.php$ block is a regular expression match that applies to any request ending in ".php". It includes the fastcgi-php.conf snippet, which contains FastCGI directives for processing PHP scripts. The fastcgi_pass directive specifies the address and port of the FastCGI server. In this case, it is set to wordpress:9000, indicating that NGINX should pass PHP requests to the FastCGI server running on the hostname "wordpress" and port 9000.
-
-# The commented section at the bottom represents a virtual host configuration for example.com. It's currently commented out, but you can move it to a different file under sites-available/ and symlink it to sites-enabled/ to enable it.
-
-# The line `fastcgi_pass wordpress:9000;` is responsible for proxying the PHP requests to the FastCGI server running on the host named "wordpress" and listening on port 9000. 
-
-# In this case, "wordpress" is used as a hostname or network address that should resolve to the IP address of the server running the FastCGI PHP process. By specifying `wordpress` as the hostname, it implies that there is another service or container named "wordpress" on the same network, which is responsible for handling PHP requests.
-
-# The IP address and port combination (`wordpress:9000`) is a common configuration for running PHP applications with NGINX and PHP-FPM (FastCGI Process Manager). The PHP-FPM process listens on port 9000 and processes the PHP scripts. NGINX acts as a reverse proxy, forwarding PHP requests to the PHP-FPM process for execution.
-
-# So, in summary, the `fastcgi_pass wordpress:9000;` directive tells NGINX to pass the PHP requests to the FastCGI server running on the host named "wordpress" at port 9000 for processing.ma
+#ssl_certificate and ssl_certificate_key: These lines specify the paths to your SSL certificate and private key files, respectively.

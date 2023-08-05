@@ -2,13 +2,11 @@
 FROM  debian:bullseye
 
 # Update and upgrade the system packages in the container
-# Install wget and unzip tools in the container
-# Install PHP 7.4, PHP-FPM, PHP MySQL extension, and MariaDB client in the container
+#  install php7.4 and its dependencies like php-fpm and php-mysql in the container
 
 RUN apt-get update && apt-get upgrade -y \
-    && apt-get -y install wget unzip \
-    && apt-get install -y php7.4 php-fpm php-mysql mariadb-client
-
+    && apt-get -y install wget \
+    && apt-get install -y php7.4 php-fpm php-mysql  
 
 # Create a directory to store WordPress files
 # Set the appropriate permissions for the WordPress directory
@@ -17,8 +15,6 @@ RUN apt-get update && apt-get upgrade -y \
 # Make the downloaded WP-CLI tool executable
 # Move the WP-CLI tool to the /usr/local/bin directory
 RUN mkdir -p /var/www/html/wordpress \
-    && chmod -R 755 /var/www/html/wordpress \
-    && chown -R root:root /var/www/html/wordpress \
     && wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
@@ -35,12 +31,7 @@ COPY /conf/wp-config.php /var/www/html/wordpress/wp-config.php
 # Make the config.sh script executable
 # Create a directory for PHP-FPM, create a PID file, and set appropriate permissions
 RUN chmod +x config.sh \
-    && mkdir -p /run/php/ \
-    && touch /run/php/php7.4-fpm.pid \
-    && chmod 777 /run/php/php7.4-fpm.pid
+    && mkdir -p /run/php/ 
 
-# Set the entrypoint of the container to execute the config.sh script
-ENTRYPOINT ["bash", "/config.sh"]
-
-# Set the default command to start PHP-FPM in the container
-CMD ["php-fpm7.4", "-RF"]
+# run the config.sh script
+CMD ["bash", "/config.sh"]

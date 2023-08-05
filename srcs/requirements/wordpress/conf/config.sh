@@ -3,7 +3,7 @@
 # Install WordPress
 
 # Create the directory for WordPress if it doesn't exist
-sleep 10
+sleep 25
 echo "Wordpress: creating users..."
 if [ ! -d /var/www/html/wordpress ]; then
   mkdir -p /var/www/html/wordpress
@@ -27,6 +27,9 @@ wp core install --allow-root \
 
 # Create a new user with administrative privileges using WP-CLI
 wp user create --allow-root ${MYSQL_USER} ${WP_ADMIN_EMAIL} --user_pass=${MYSQL_PASSWORD}
+
+#  Set the default command to start PHP-FPM in the container
+exec php-fpm7.4 -F
 
 # WordPress setup is complete
 echo "Wordpress: set up!"

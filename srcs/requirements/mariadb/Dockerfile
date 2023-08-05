@@ -5,16 +5,15 @@ FROM debian:bullseye
 # apt-get is a package manager for Debian-based Linux distributions
 # Installs the MariaDB server package in the image
 RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y psmisc \
-    && apt-get install -y systemctl \
     && apt-get install -y mariadb-server 
 
 
 # Copies the `bind_adress.sh` file from the `tools` directory on the local machine to the root directory of the image
 COPY tools/bind_adress.sh /
 
+# COPY tools/50-server.cnf /etc/mysql/mariadb.conf.d/
 # Sets the executable permission on the `bind_adress.sh` file in the image
 RUN chmod +x bind_adress.sh
 
 # Specifies the entry point command for the container, which runs the `bind_adress.sh` script when the container starts.
-ENTRYPOINT ["bash", "bind_adress.sh"]
+CMD ["bash", "bind_adress.sh"]

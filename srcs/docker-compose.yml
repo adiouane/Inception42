@@ -53,8 +53,8 @@ volumes:
   wordpress:
     driver: local  # Using the local volume driver
     driver_opts:
-      type: none
-      o: bind
+      type: none # Using the 'none' volume type to connect the host's directory to the container's volume
+      o: bind # o is for options and bind is for mounting the volume
       device: $HOME/data/wordpress  # Connecting the host's directory to the container's volume
   mariadb:
     driver: local  # Using the local volume driver
