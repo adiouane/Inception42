@@ -55,13 +55,13 @@ volumes:
     driver_opts:
       type: none # Using the 'none' volume type to connect the host's directory to the container's volume
       o: bind # o is for options and bind is for mounting the volume
-      device: /home/adiouane/data/wordpress  # Connecting the host's directory to the container's volume
+      device: $HOME/data/wordpress  # Connecting the host's directory to the container's volume
   mariadb:
     driver: local  # Using the local volume driver
     driver_opts:
       type: none
       o: bind
-      device: /home/adiouane/data/mariadb  # Connecting the host's directory to the container's volume
+      device: $HOME/data/mariadb  # Connecting the host's directory to the container's volume
 
 networks:
   inception:
