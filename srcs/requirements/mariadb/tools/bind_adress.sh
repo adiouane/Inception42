@@ -2,6 +2,7 @@
 # Start the MariaDB service
 service mariadb start
 
+sleep 4
 
 # Create a new SQL file with the command to create the database
 # It's like building a new room in your house for a special project.
@@ -20,11 +21,6 @@ mariadb -e "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PA
 # It's like giving someone all the keys to the new room you made.
 # This command lets our new user have complete control over the database space.
 mariadb -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' ;"
-
-# Change the password for the 'root' user in the database
-# It's like updating the lock on the main entrance of a secret room.
-# This command changes the password for the main user of the database.
-mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
 
 # Add to the SQL file the command to flush the privileges to ensure the changes take effect
 # It's like refreshing a web page to see the latest changes.
