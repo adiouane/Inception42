@@ -11,7 +11,6 @@ RUN apt-get update && apt-get upgrade -y \
 # Copies the `bind_adress.sh` file from the `tools` directory on the local machine to the root directory of the image
 COPY tools/bind_adress.sh /
 
-# COPY tools/50-server.cnf /etc/mysql/mariadb.conf.d/
 # Sets the executable permission on the `bind_adress.sh` file in the image
 RUN chmod +x bind_adress.sh
 

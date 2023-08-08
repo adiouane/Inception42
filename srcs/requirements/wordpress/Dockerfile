@@ -6,7 +6,7 @@ FROM  debian:bullseye
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get -y install wget \
-    && apt-get install -y php7.4 php-fpm php-mysql  
+    && apt-get install -y php7.4 php-fpm php-mysql  mariadb-client
 
 # Create a directory to store WordPress files
 # Set the appropriate permissions for the WordPress directory
@@ -26,12 +26,12 @@ COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 COPY conf/config.sh /
 
 # Copy the custom wp-config.php file to the WordPress directory
-COPY /conf/wp-config.php /var/www/html/wordpress/wp-config.php
+# COPY /conf/wp-config.php /var/www/html/wordpress/wp-config.php
 
 # Make the config.sh script executable
 # Create a directory for PHP-FPM, create a PID file, and set appropriate permissions
-RUN chmod +x config.sh \
-    && mkdir -p /run/php/ 
+RUN chmod +x config.sh 
+    # && mkdir -p /run/php/ 
 
 # run the config.sh script
 CMD ["bash", "/config.sh"]

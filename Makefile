@@ -25,7 +25,6 @@ fclean:
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
-	@docker volume rm srcs_wordpress srcs_mariadb
 
 
 

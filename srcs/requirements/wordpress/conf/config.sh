@@ -3,7 +3,8 @@
 # Install WordPress
 
 # Create the directory for WordPress if it doesn't exist
-sleep 25
+mkdir -p /run/php
+sleep 24
 echo "Wordpress: creating users..."
 if [ ! -d /var/www/html/wordpress ]; then
   mkdir -p /var/www/html/wordpress
@@ -15,6 +16,9 @@ cd /var/www/html/wordpress/
 # Download the WordPress core files using WP-CLI (WordPress Command Line Interface)
 wp core download --allow-root --path="/var/www/html/wordpress/"
 
+chmod -R 777 /var/www/html/wordpress/wp-content
+
+wp config create --path="/var/www/html/wordpress/" --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${DB_HOST} --allow-root --skip-check
 
 # Install WordPress using WP-CLI
 wp core install --allow-root \
@@ -29,10 +33,11 @@ wp core install --allow-root \
 wp user create --allow-root ${MYSQL_USER} ${WP_ADMIN_EMAIL} --user_pass=${MYSQL_PASSWORD}
 
 #  Set the default command to start PHP-FPM in the container
-exec php-fpm7.4 -F
+# exec php-fpm7.4 -F
+exec /usr/sbin/php-fpm7.4 -F
 
 # WordPress setup is complete
 echo "Wordpress: set up!"
 
-# Start process to keep the container running
-exec "$@"
+# # Start process to keep the container running
+# exec "$@"
