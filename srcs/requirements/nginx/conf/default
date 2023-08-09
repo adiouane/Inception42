@@ -20,6 +20,7 @@ server {
     }
 }
 
+# SSL/TLS: SSL (Secure Sockets Layer) and its successor TLS (Transport Layer Security) are protocols for establishing authenticated and encrypted links between networked computers. Although the terms SSL and TLS are often used interchangeably, SSL is still widely used. TLS is the more modern version and is the successor to SSL.
 #ssl_protocols TLSv1.3;: This line specifies that only TLSv1.3 should be used for secure communication.
 
-#ssl_certificate and ssl_certificate_key: These lines specify the paths to your SSL certificate and private key files, respectively.
+#ssl_certificate and ssl_certificate_key: These lines specify the paths to your SSL certificate and private key files, respectively.  

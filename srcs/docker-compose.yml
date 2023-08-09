@@ -1,68 +1,65 @@
 version: '3.3'
 
 services:
-  # MariaDB service
   mariadb:
     image: mariadb
     container_name: mariadb
-    volumes: 
-      - mariadb:/var/lib/mysql  # Storing MariaDB data even if the container restarts
+    volumes:
+      - mariadb:/var/lib/mysql
     networks:
-      - inception  # Connecting to the 'inception' network
-    build: 
-      context: requirements/mariadb  # Preparing MariaDB using its Dockerfile
-      dockerfile: Dockerfile  # Instructions for building the MariaDB container
-    env_file: .env  # Getting environment variables from a file named '.env'
-    restart: always  # Ensuring the container restarts if it fails
+      - inception
+    build:
+      context: requirements/mariadb
+      dockerfile: Dockerfile
+    env_file: .env
+    restart: always
 
-  # WordPress service
   wordpress:
     image: wordpress
     container_name: wordpress
-    env_file: .env  # Loading environment variables from the '.env' file
+    env_file: .env
     volumes:
-    - wordpress:/var/www/html/wordpress  # Storing WordPress data even if the container restarts
+      - wordpress:/var/www/html/wordpress
     networks:
-      - inception  # Connecting to the 'inception' network
-    build: 
-      context: requirements/wordpress  # Preparing WordPress using its Dockerfile
-      dockerfile: Dockerfile  # Instructions for building the WordPress container
+      - inception
+    build:
+      context: requirements/wordpress
+      dockerfile: Dockerfile
     depends_on:
-      - mariadb  # Making sure the MariaDB service starts first
-    restart: always  # Ensuring the container restarts if it fails
+      - mariadb
+    restart: always
 
-  # Nginx service
   nginx:
     image: nginx
     container_name: nginx
     volumes:
-      - wordpress:/var/www/html/wordpress  # Sharing data with the WordPress service
+      - wordpress:/var/www/html/wordpress
     networks:
-      - inception  # Connecting to the 'inception' network
+      - inception
     depends_on:
-      - wordpress  # Making sure the WordPress service starts first
-    build: 
-      context: requirements/nginx  # Preparing Nginx using its Dockerfile
-      dockerfile: Dockerfile  # Instructions for building the Nginx container
-    env_file: .env  # Getting environment variables from a file named '.env'
+      - wordpress
+    build:
+      context: requirements/nginx
+      dockerfile: Dockerfile
+    env_file: .env
     ports:
-      - "443:443"  # Making the website accessible via HTTPS on the host's port 443
-    restart: always  # Ensuring the container restarts if it fails
+      - "443:443"
+    restart: always
 
 volumes:
   wordpress:
-    driver: local  # Using the local volume driver
-    driver_opts:
-      type: none # Using the 'none' volume type to connect the host's directory to the container's volume
-      o: bind # o is for options and bind is for mounting the volume
-      device: $HOME/data/wordpress  # Connecting the host's directory to the container's volume
-  mariadb:
-    driver: local  # Using the local volume driver
+    driver: local
     driver_opts:
       type: none
       o: bind
-      device: $HOME/data/mariadb  # Connecting the host's directory to the container's volume
+      device: /home/adiouane/data/wordpress
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/adiouane/data/mariadb
 
 networks:
   inception:
-    driver: bridge  # Using the bridge network driver for the 'inception' network
+    driver: bridge

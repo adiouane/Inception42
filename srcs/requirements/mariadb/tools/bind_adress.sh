@@ -8,4 +8,3 @@ mariadb -e "FLUSH PRIVILEGES;"
 mysqladmin -u root shutdown
 mysqld_safe --bind-address=0.0.0.0
 
-# export MYSQL_DATABASE=wordpress MYSQL_USER=wordpress MYSQL_PASSWORD=wordpress 

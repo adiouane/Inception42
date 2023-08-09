@@ -5,10 +5,6 @@
 # Create the directory for WordPress if it doesn't exist
 mkdir -p /run/php
 sleep 24
-echo "Wordpress: creating users..."
-if [ ! -d /var/www/html/wordpress ]; then
-  mkdir -p /var/www/html/wordpress
-fi
 
 # Change to the WordPress directory
 cd /var/www/html/wordpress/
@@ -38,6 +34,3 @@ exec /usr/sbin/php-fpm7.4 -F
 
 # WordPress setup is complete
 echo "Wordpress: set up!"
-
-# # Start process to keep the container running
-# exec "$@"
