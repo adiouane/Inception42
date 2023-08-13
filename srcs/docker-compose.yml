@@ -2,7 +2,6 @@ version: '3.3'
 
 services:
   mariadb:
-    image: mariadb
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql
@@ -15,7 +14,6 @@ services:
     restart: always
 
   wordpress:
-    image: wordpress
     container_name: wordpress
     env_file: .env
     volumes:
@@ -30,7 +28,6 @@ services:
     restart: always
 
   nginx:
-    image: nginx
     container_name: nginx
     volumes:
       - wordpress:/var/www/html/wordpress
